@@ -15,6 +15,15 @@ ApplicationWindow {
 
     // Viewing mode names
     readonly property var modeNames: ["Anaglyph (Red/Cyan)", "Side-by-Side", "Wiggle"]
+    
+    // Action group for mutually exclusive viewing modes
+    ActionGroup {
+        id: modeActionGroup
+        actions: [modeAnaglyph, modeSideBySide, modeWiggle]
+    }
+    Action { id: modeAnaglyph; text: "Anaglyph (Red/Cyan)"; checkable: true; checked: backend.viewingMode === 0; onTriggered: backend.viewingMode = 0 }
+    Action { id: modeSideBySide; text: "Side-by-Side"; checkable: true; checked: backend.viewingMode === 1; onTriggered: backend.viewingMode = 1 }
+    Action { id: modeWiggle; text: "Wiggle"; checkable: true; checked: backend.viewingMode === 2; onTriggered: backend.viewingMode = 2 }
 
     // Timer for slideshow
     Timer {
@@ -50,18 +59,10 @@ ApplicationWindow {
                 text: "Fullscreen (F12)"; 
                 onTriggered: rootWindow.visibility === Window.FullScreen ? rootWindow.showNormal() : rootWindow.showFullScreen()
             }
-        }
-        Menu {
-            title: "View Mode"
-            Repeater {
-                model: modeNames
-                MenuItem {
-                    text: modelData
-                    checkable: true
-                    checked: index === backend.viewingMode
-                    onTriggered: backend.viewingMode = index
-                }
-            }
+            MenuSeparator { }
+            MenuItem { action: modeAnaglyph }
+            MenuItem { action: modeSideBySide }
+            MenuItem { action: modeWiggle }
         }
         Menu {
             title: "Slideshow"
