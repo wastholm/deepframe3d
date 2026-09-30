@@ -15,19 +15,22 @@ int main(int argc, char *argv[]) {
     app.setOrganizationName("Deepframe3D");
     app.setApplicationVersion("1.0.0");
 
-    // Create image provider
-    FrameImageProvider imageProvider;
-    
-    // Create backend
-    Backend backend(&imageProvider);
+    // Create image provider and backend on the heap
+    // so they survive as long as the engine needs them
+    FrameImageProvider *imageProvider = new FrameImageProvider;
+    Backend *backend = new Backend(imageProvider);
 
     QQmlApplicationEngine engine;
     
     // Register image provider
-    engine.addImageProvider("mpo", &imageProvider);
+    engine.addImageProvider("mpo", imageProvider);
     
     // Expose backend to QML
-    engine.rootContext()->setContextProperty("backend", &backend);
+    engine.rootContext()->setContextProperty("backend", backend);
+    
+    // Set parent-child relationship for proper cleanup
+    imageProvider->setParent(&engine);
+    backend->setParent(&engine);
 
     engine.load(QUrl("qrc:/main.qml"));
 
@@ -38,7 +41,7 @@ int main(int argc, char *argv[]) {
     // Process command line arguments
     QStringList args = app.arguments();
     if (args.size() > 1) {
-        backend.loadFiles(args.mid(1));
+        backend->loadFiles(args.mid(1));
     }
 
     return app.exec();

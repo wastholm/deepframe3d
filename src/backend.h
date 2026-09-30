@@ -16,6 +16,7 @@ class Backend : public QObject {
     Q_PROPERTY(bool isPlaying READ isPlaying WRITE setIsPlaying NOTIFY isPlayingChanged)
     Q_PROPERTY(int slideInterval READ slideInterval WRITE setSlideInterval NOTIFY slideIntervalChanged)
     Q_PROPERTY(int wiggleInterval READ wiggleInterval WRITE setWiggleInterval NOTIFY wiggleIntervalChanged)
+    Q_PROPERTY(int imageVersion READ imageVersion NOTIFY framesLoaded)
 
 public:
     explicit Backend(FrameImageProvider *provider, QObject *parent = nullptr);
@@ -26,6 +27,7 @@ public:
     Q_INVOKABLE void togglePlay();
     Q_INVOKABLE void faster();
     Q_INVOKABLE void slower();
+    Q_INVOKABLE void quit();
 
 private:
     void loadCurrentFile();
@@ -38,6 +40,7 @@ private:
     bool isPlaying() const;
     int slideInterval() const;
     int wiggleInterval() const;
+    int imageVersion() const;
 
 public slots:
     void setCurrentFileIndex(int index);
@@ -59,6 +62,7 @@ signals:
     void slideIntervalChanged();
     void wiggleIntervalChanged();
     void error(const QString &message);
+    void framesLoaded();
 
 private:
     MpoParser m_parser;
@@ -70,6 +74,7 @@ private:
     int m_slideInterval;
     int m_wiggleInterval;
     QVector<MpoParser::Frame> m_currentFrames;
+    int m_imageVersion;
 };
 
 #endif // BACKEND_H

@@ -2,6 +2,7 @@
 #include <QFileInfo>
 #include <QTimer>
 #include <QDebug>
+#include <QCoreApplication>
 
 Backend::Backend(FrameImageProvider *provider, QObject *parent)
     : QObject(parent),
@@ -10,7 +11,8 @@ Backend::Backend(FrameImageProvider *provider, QObject *parent)
       m_viewingMode(0),
       m_isPlaying(false),
       m_slideInterval(2000),
-      m_wiggleInterval(200)
+      m_wiggleInterval(200),
+      m_imageVersion(0)
 {
     connect(&m_parser, &MpoParser::error, this, &Backend::handleError);
 }
@@ -38,7 +40,6 @@ Q_INVOKABLE void Backend::loadFiles(const QStringList &filePaths) {
 void Backend::loadCurrentFile() {
     if (m_currentFileIndex >= 0 && m_currentFileIndex < m_fileList.size()) {
         QString filePath = m_fileList.at(m_currentFileIndex);
-        // Connect to get the parsed frames
         QVector<MpoParser::Frame> frames = m_parser.parse(filePath);
         handleFramesParsed(frames);
     }
@@ -74,6 +75,10 @@ Q_INVOKABLE void Backend::slower() {
     setSlideInterval(std::min(10000, m_slideInterval + 500));
 }
 
+Q_INVOKABLE void Backend::quit() {
+    QCoreApplication::quit();
+}
+
 void Backend::handleFramesParsed(const QVector<MpoParser::Frame> &frames) {
     m_currentFrames = frames;
     emit frameCountChanged();
@@ -88,6 +93,8 @@ void Backend::handleFramesParsed(const QVector<MpoParser::Frame> &frames) {
     } else {
         m_imageProvider->clearFrames();
     }
+    m_imageVersion++;
+    emit framesLoaded();
 }
 
 void Backend::handleError(const QString &message) {
@@ -108,6 +115,7 @@ int Backend::frameCount() const { return m_currentFrames.size(); }
 bool Backend::isPlaying() const { return m_isPlaying; }
 int Backend::slideInterval() const { return m_slideInterval; }
 int Backend::wiggleInterval() const { return m_wiggleInterval; }
+int Backend::imageVersion() const { return m_imageVersion; }
 
 // Setters
 void Backend::setCurrentFileIndex(int index) {

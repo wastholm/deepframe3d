@@ -1,6 +1,7 @@
 #include "mpo.h"
 #include <QFile>
 #include <QImageReader>
+#include <QBuffer>
 #include <QDebug>
 
 MpoParser::MpoParser(QObject *parent) : QObject(parent) {}
@@ -16,6 +17,17 @@ QVector<MpoParser::Frame> MpoParser::parse(const QString &filePath) {
 }
 
 QVector<MpoParser::Frame> MpoParser::parse(const QByteArray &data) {
+    // First, try to parse as a standard QImage (single image)
+    QImage singleImage = QImage::fromData(data);
+    if (!singleImage.isNull()) {
+        Frame frame;
+        frame.image = singleImage;
+        frame.width = singleImage.width();
+        frame.height = singleImage.height();
+        return {frame};
+    }
+    
+    // If that fails, try to parse as MPO (multi-frame)
     return extractFrames(data);
 }
 
@@ -62,9 +74,8 @@ QVector<MpoParser::Frame> MpoParser::extractFrames(const QByteArray &data) {
         // Extract the frame data
         QByteArray frameData = data.mid(frameStart, frameEnd - frameStart);
         
-        // Try to decode with QImageReader
-        QImageReader reader(frameData, "JPG");
-        QImage image = reader.read();
+        // Try to decode directly
+        QImage image = QImage::fromData(frameData);
         
         if (!image.isNull()) {
             Frame frame;
@@ -72,11 +83,18 @@ QVector<MpoParser::Frame> MpoParser::extractFrames(const QByteArray &data) {
             frame.width = image.width();
             frame.height = image.height();
             frames.append(frame);
-            
-            // Stop after we have enough frames (typically 2 for stereo)
-            // but continue to parse all available frames
         } else {
-            qWarning() << "Failed to decode frame at" << frameStart << ":" << reader.errorString();
+            // Try with explicit format
+            image = QImage::fromData(frameData, "JPG");
+            if (!image.isNull()) {
+                Frame frame;
+                frame.image = image;
+                frame.width = image.width();
+                frame.height = image.height();
+                frames.append(frame);
+            } else {
+                qWarning() << "Failed to decode frame at" << frameStart;
+            }
         }
         
         pos = frameEnd;

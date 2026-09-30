@@ -1,7 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
-import Qt.labs.settings 1.0
 
 ApplicationWindow {
     id: rootWindow
@@ -11,32 +10,8 @@ ApplicationWindow {
     title: "Deepframe3D"
     menuBar: menuBar
     
-    // Settings for window state persistence
-    Settings {
-        id: windowSettings
-        category: "window"
-    }
-
-    // Load saved window state
-    Component.onCompleted: {
-        width = windowSettings.value("width", 800)
-        height = windowSettings.value("height", 600)
-        x = windowSettings.value("x", 100)
-        y = windowSettings.value("y", 100)
-        backend.viewingMode = windowSettings.value("viewingMode", 0)
-        backend.slideInterval = windowSettings.value("slideInterval", 2000)
-        backend.wiggleInterval = windowSettings.value("wiggleInterval", 200)
-    }
-
-    Component.onDestruction: {
-        windowSettings.setValue("width", width)
-        windowSettings.setValue("height", height)
-        windowSettings.setValue("x", x)
-        windowSettings.setValue("y", y)
-        windowSettings.setValue("viewingMode", backend.viewingMode)
-        windowSettings.setValue("slideInterval", backend.slideInterval)
-        windowSettings.setValue("wiggleInterval", backend.wiggleInterval)
-    }
+    // Window state persistence will be added back later
+    // For now, use hardcoded defaults
 
     // Viewing mode names
     readonly property var modeNames: ["Anaglyph (Red/Cyan)", "Side-by-Side", "Wiggle"]
@@ -66,7 +41,8 @@ ApplicationWindow {
         id: menuBar
         Menu {
             title: "File"
-            MenuItem { text: "Exit"; onTriggered: Qt.quit() }
+            MenuItem { text: "Open... (Ctrl+O)"; onTriggered: {} }
+            MenuItem { text: "Exit"; onTriggered: backend.quit() }
         }
         Menu {
             title: "View"
@@ -130,67 +106,64 @@ ApplicationWindow {
     }
 
     // Main display area
-    Item {
+    Rectangle {
         id: displayArea
         anchors.fill: parent
         anchors.margins: 0
         anchors.bottomMargin: statusBar.height
+        color: "black"
 
-        // Anaglyph mode - show left image only for now
+        // Anaglyph mode
         Image {
-            id: anaglyphDisplay
             visible: backend.viewingMode === 0 && backend.frameCount >= 2
             anchors.fill: parent
-            fillMode: Image.PreserveAspect
-            source: "image://mpo/left"
+            fillMode: Image.PreserveAspectFit
+            source: (visible ? ("image://mpo/left?version=" + backend.imageVersion) : "")
         }
 
         // Side-by-side mode
         Row {
-            id: sideBySideDisplay
             visible: backend.viewingMode === 1 && backend.frameCount >= 2
             anchors.fill: parent
             spacing: 0
             
             Image {
-                source: "image://mpo/left"
                 width: parent.width / 2
                 height: parent.height
-                fillMode: Image.PreserveAspect
+                fillMode: Image.PreserveAspectFit
+                source: (parent.visible ? ("image://mpo/left?version=" + backend.imageVersion) : "")
             }
             Image {
-                source: "image://mpo/right"
                 width: parent.width / 2
                 height: parent.height
-                fillMode: Image.PreserveAspect
+                fillMode: Image.PreserveAspectFit
+                source: (parent.visible ? ("image://mpo/right?version=" + backend.imageVersion) : "")
             }
         }
 
         // Wiggle mode
         Image {
-            id: wiggleDisplay
             visible: backend.viewingMode === 2 && backend.frameCount >= 2
             anchors.fill: parent
-            fillMode: Image.PreserveAspect
-            source: wiggleState ? "image://mpo/right" : "image://mpo/left"
+            fillMode: Image.PreserveAspectFit
+            source: (visible ? (wiggleState ? ("image://mpo/right?version=" + backend.imageVersion) : ("image://mpo/left?version=" + backend.imageVersion)) : "")
         }
 
         // Single image display
         Image {
-            id: singleImageDisplay
             visible: backend.frameCount === 1
             anchors.fill: parent
-            fillMode: Image.PreserveAspect
-            source: "image://mpo/left"
+            fillMode: Image.PreserveAspectFit
+            source: (visible ? ("image://mpo/left?version=" + backend.imageVersion) : "")
         }
     }
 
-    // Keyboard shortcuts - removed for now due to Qt6 compatibility
+    // Keyboard shortcuts - removed for now (Qt6 compatibility issue)
 
     // Drop area for drag-and-drop
     DropArea {
         anchors.fill: parent
-        onDropped: {
+        onDropped: function(drop) {
             var paths = []
             for (var i = 0; i < drop.urls.length; i++) {
                 var path = drop.urls[i].toString().replace("file://", "")

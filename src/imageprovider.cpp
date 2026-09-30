@@ -3,12 +3,15 @@
 FrameImageProvider::FrameImageProvider() : QQuickImageProvider(QQuickImageProvider::Image) {}
 
 QImage FrameImageProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize) {
-    if (id == "left") {
+    // Strip query parameters from id (e.g., "left?version=1" -> "left")
+    QString baseId = id.split('?').first();
+    
+    if (baseId == "left") {
         if (size) {
             *size = m_leftFrame.size();
         }
         return m_leftFrame;
-    } else if (id == "right") {
+    } else if (baseId == "right") {
         if (size) {
             *size = m_rightFrame.size();
         }
