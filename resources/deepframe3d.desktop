@@ -1,0 +1,16 @@
+[Desktop Entry]
+Version=1.0.0
+Type=Application
+Name=Deepframe3D
+GenericName=3D Image Viewer
+Comment=View MPO stereo images in anaglyph, side-by-side, or wiggle mode
+Exec=deepframe3d %F
+Icon=deepframe3d
+Terminal=false
+Categories=Graphics;Viewer;
+MimeType=image/mpo;
+StartupWMClass=deepframe3d
+
+[Desktop Action Open]
+Name=Open File
+Exec=deepframe3d %F

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="image/mpo">
+    <comment>MPO 3D Image</comment>
+    <comment xml:lang="en">MPO stereo image</comment>
+    <glob pattern="*.mpo"/>
+    <glob pattern="*.MPO"/>
+    <icon name="x-office-document"/>
+  </mime-type>
+</mime-info>
