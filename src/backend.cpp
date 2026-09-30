@@ -30,6 +30,10 @@ Q_INVOKABLE void Backend::loadFiles(const QStringList &filePaths) {
     if (!m_fileList.isEmpty()) {
         m_currentFileIndex = 0;
         loadCurrentFile();
+        // Auto-start slideshow if multiple files
+        if (m_fileList.size() > 1) {
+            setIsPlaying(true);
+        }
     }
     
     emit fileCountChanged();
