@@ -16,6 +16,11 @@ ApplicationWindow {
     // Viewing mode names
     readonly property var modeNames: ["Anaglyph (Red/Cyan)", "Side-by-Side", "Wiggle"]
     
+    // Actions with shortcuts
+    Action { id: openAction; text: "Open..."; shortcut: "Ctrl+O"; onTriggered: {} }
+    Action { id: exitAction; text: "Exit"; shortcut: "Ctrl+Q"; onTriggered: backend.quit() }
+    Action { id: fullscreenAction; text: "Fullscreen"; shortcut: "F12"; onTriggered: rootWindow.visibility === Window.FullScreen ? rootWindow.showNormal() : rootWindow.showFullScreen() }
+    
     // Action group for mutually exclusive viewing modes
     ActionGroup {
         id: modeActionGroup
@@ -50,15 +55,12 @@ ApplicationWindow {
         id: menuBar
         Menu {
             title: "File"
-            MenuItem { text: "Open... (Ctrl+O)"; onTriggered: {} }
-            MenuItem { text: "Exit (Ctrl+Q)"; onTriggered: backend.quit() }
+            MenuItem { action: openAction }
+            MenuItem { action: exitAction }
         }
         Menu {
             title: "View"
-            MenuItem { 
-                text: "Fullscreen (F12)"; 
-                onTriggered: rootWindow.visibility === Window.FullScreen ? rootWindow.showNormal() : rootWindow.showFullScreen()
-            }
+            MenuItem { action: fullscreenAction }
             MenuSeparator { }
             MenuItem { action: modeAnaglyph }
             MenuItem { action: modeSideBySide }
