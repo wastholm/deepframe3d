@@ -26,6 +26,9 @@ public:
     Q_INVOKABLE void togglePlay();
     Q_INVOKABLE void faster();
     Q_INVOKABLE void slower();
+
+private:
+    void loadCurrentFile();
     
     int currentFileIndex() const;
     int fileCount() const;

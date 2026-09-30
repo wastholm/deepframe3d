@@ -61,25 +61,11 @@ ApplicationWindow {
     
     property bool wiggleState: false
 
-    // File dialog
-    FileDialog {
-        id: fileDialog
-        title: "Open MPO Files"
-        nameFilters: ["MPO files (*.mpo)", "All files (*)"]
-        selectMultiple: true
-        onAccepted: {
-            backend.loadFiles(fileDialog.fileUrls.map(function(u) { 
-                return u.toString().replace("file://", "") 
-            }))
-        }
-    }
-
     // Menu bar
     MenuBar {
         id: menuBar
         Menu {
             title: "File"
-            MenuItem { text: "Open..."; onTriggered: fileDialog.open() }
             MenuItem { text: "Exit"; onTriggered: Qt.quit() }
         }
         Menu {
@@ -87,7 +73,6 @@ ApplicationWindow {
             MenuItem { 
                 text: "Fullscreen"; 
                 onTriggered: rootWindow.visibility === Window.FullScreen ? rootWindow.showNormal() : rootWindow.showFullScreen()
-                shortcut: "F11"
             }
         }
         Menu {
@@ -107,27 +92,22 @@ ApplicationWindow {
             MenuItem { 
                 text: "Play/Pause"; 
                 onTriggered: backend.togglePlay()
-                shortcut: "Space"
             }
             MenuItem { 
                 text: "Previous"; 
                 onTriggered: backend.prevFile()
-                shortcut: "Left"
             }
             MenuItem { 
                 text: "Next"; 
                 onTriggered: backend.nextFile()
-                shortcut: "Right"
             }
             MenuItem { 
                 text: "Faster"; 
                 onTriggered: backend.faster()
-                shortcut: "+"
             }
             MenuItem { 
                 text: "Slower"; 
                 onTriggered: backend.slower()
-                shortcut: "-"
             }
         }
     }
@@ -156,27 +136,13 @@ ApplicationWindow {
         anchors.margins: 0
         anchors.bottomMargin: statusBar.height
 
-        // Anaglyph mode - stack left (red only) and right (cyan only) images
-        Item {
+        // Anaglyph mode - show left image only for now
+        Image {
             id: anaglyphDisplay
             visible: backend.viewingMode === 0 && backend.frameCount >= 2
             anchors.fill: parent
-            
-            // Right image: tint with cyan (0,1,1) to keep only G+B channels
-            Image {
-                anchors.fill: parent
-                fillMode: Image.PreserveAspect
-                source: "image://mpo/right"
-                color: "cyan"
-            }
-            
-            // Left image: tint with red (1,0,0) to keep only R channel
-            Image {
-                anchors.fill: parent
-                fillMode: Image.PreserveAspect
-                source: "image://mpo/left"
-                color: "red"
-            }
+            fillMode: Image.PreserveAspect
+            source: "image://mpo/left"
         }
 
         // Side-by-side mode
@@ -219,41 +185,7 @@ ApplicationWindow {
         }
     }
 
-    // Keyboard shortcuts
-    Shortcut {
-        sequence: "Esc"
-        onActivated: rootWindow.showNormal()
-    }
-
-    Shortcut {
-        sequence: "Right"
-        onActivated: backend.nextFile()
-    }
-
-    Shortcut {
-        sequence: "Left"
-        onActivated: backend.prevFile()
-    }
-
-    Shortcut {
-        sequence: "Space"
-        onActivated: backend.togglePlay()
-    }
-
-    Shortcut {
-        sequence: "F11"
-        onTriggered: rootWindow.visibility === Window.FullScreen ? rootWindow.showNormal() : rootWindow.showFullScreen()
-    }
-
-    Shortcut {
-        sequence: "+"
-        onActivated: backend.faster()
-    }
-
-    Shortcut {
-        sequence: "-"
-        onActivated: backend.slower()
-    }
+    // Keyboard shortcuts - removed for now due to Qt6 compatibility
 
     // Drop area for drag-and-drop
     DropArea {
