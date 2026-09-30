@@ -21,14 +21,18 @@ ApplicationWindow {
     Action { id: exitAction; text: "Exit"; shortcut: "Ctrl+Q"; onTriggered: backend.quit() }
     Action { id: fullscreenAction; text: "Fullscreen"; shortcut: "F12"; onTriggered: rootWindow.visibility === Window.FullScreen ? rootWindow.showNormal() : rootWindow.showFullScreen() }
     
-    // Action group for mutually exclusive viewing modes
-    ActionGroup {
-        id: modeActionGroup
-        actions: [modeAnaglyph, modeSideBySide, modeWiggle]
+    // Actions for viewing modes
+    Action { id: modeAnaglyph; text: "Anaglyph (Red/Cyan)"; checkable: true; onTriggered: backend.viewingMode = 0 }
+    Action { id: modeSideBySide; text: "Side-by-Side"; checkable: true; onTriggered: backend.viewingMode = 1 }
+    Action { id: modeWiggle; text: "Wiggle"; checkable: true; onTriggered: backend.viewingMode = 2 }
+    ActionGroup { id: modeActionGroup; actions: [modeAnaglyph, modeSideBySide, modeWiggle] }
+    
+    // Initialize checked state based on backend
+    Component.onCompleted: {
+        modeAnaglyph.checked = backend.viewingMode === 0
+        modeSideBySide.checked = backend.viewingMode === 1
+        modeWiggle.checked = backend.viewingMode === 2
     }
-    Action { id: modeAnaglyph; text: "Anaglyph (Red/Cyan)"; checkable: true; checked: backend.viewingMode === 0; onTriggered: backend.viewingMode = 0 }
-    Action { id: modeSideBySide; text: "Side-by-Side"; checkable: true; checked: backend.viewingMode === 1; onTriggered: backend.viewingMode = 1 }
-    Action { id: modeWiggle; text: "Wiggle"; checkable: true; checked: backend.viewingMode === 2; onTriggered: backend.viewingMode = 2 }
 
     // Timer for slideshow
     Timer {
@@ -125,22 +129,38 @@ ApplicationWindow {
         }
 
         // Side-by-side mode
-        Row {
+        Item {
+            id: sideBySideContainer
             visible: backend.viewingMode === 1 && backend.frameCount >= 2
             anchors.fill: parent
-            spacing: 0
+            
+            // Calculate display dimensions for each frame independently
+            readonly property real leftAspect: backend.leftFrameWidth / Math.max(1, backend.leftFrameHeight)
+            readonly property real rightAspect: backend.rightFrameWidth / Math.max(1, backend.rightFrameHeight)
+            readonly property real leftDisplayWidth: height * leftAspect
+            readonly property real rightDisplayWidth: height * rightAspect
+            readonly property real totalDisplayWidth: leftDisplayWidth + rightDisplayWidth
+            readonly property real scale: Math.min(1, width / totalDisplayWidth)
+            readonly property real leftScaledWidth: leftDisplayWidth * scale
+            readonly property real rightScaledWidth: rightDisplayWidth * scale
+            readonly property real displayHeight: height * scale
             
             Image {
-                width: parent.width / 2
-                height: parent.height
+                id: leftSideImage
+                x: (sideBySideContainer.width - sideBySideContainer.totalDisplayWidth * sideBySideContainer.scale) / 2
+                y: (sideBySideContainer.height - sideBySideContainer.displayHeight) / 2
+                width: sideBySideContainer.leftScaledWidth
+                height: sideBySideContainer.displayHeight
                 fillMode: Image.PreserveAspectFit
-                source: (parent.visible ? ("image://mpo/left?version=" + backend.imageVersion) : "")
+                source: (sideBySideContainer.visible ? ("image://mpo/left?version=" + backend.imageVersion) : "")
             }
             Image {
-                width: parent.width / 2
-                height: parent.height
+                x: leftSideImage.x + leftSideImage.width
+                y: (sideBySideContainer.height - sideBySideContainer.displayHeight) / 2
+                width: sideBySideContainer.rightScaledWidth
+                height: sideBySideContainer.displayHeight
                 fillMode: Image.PreserveAspectFit
-                source: (parent.visible ? ("image://mpo/right?version=" + backend.imageVersion) : "")
+                source: (sideBySideContainer.visible ? ("image://mpo/right?version=" + backend.imageVersion) : "")
             }
         }
 
@@ -186,6 +206,16 @@ ApplicationWindow {
         }
     }
 
+    // Sync viewing mode actions with backend changes
+    Connections {
+        target: backend
+        function onViewingModeChanged() {
+            modeAnaglyph.checked = backend.viewingMode === 0
+            modeSideBySide.checked = backend.viewingMode === 1
+            modeWiggle.checked = backend.viewingMode === 2
+        }
+    }
+    
     // Error display
     Connections {
         target: backend

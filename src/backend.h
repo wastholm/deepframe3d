@@ -17,6 +17,10 @@ class Backend : public QObject {
     Q_PROPERTY(int slideInterval READ slideInterval WRITE setSlideInterval NOTIFY slideIntervalChanged)
     Q_PROPERTY(int wiggleInterval READ wiggleInterval WRITE setWiggleInterval NOTIFY wiggleIntervalChanged)
     Q_PROPERTY(int imageVersion READ imageVersion NOTIFY framesLoaded)
+    Q_PROPERTY(int leftFrameWidth READ leftFrameWidth NOTIFY framesLoaded)
+    Q_PROPERTY(int leftFrameHeight READ leftFrameHeight NOTIFY framesLoaded)
+    Q_PROPERTY(int rightFrameWidth READ rightFrameWidth NOTIFY framesLoaded)
+    Q_PROPERTY(int rightFrameHeight READ rightFrameHeight NOTIFY framesLoaded)
 
 public:
     explicit Backend(ManagedImageProvider *provider, QObject *parent = nullptr);
@@ -42,6 +46,10 @@ private:
     int slideInterval() const;
     int wiggleInterval() const;
     int imageVersion() const;
+    int leftFrameWidth() const;
+    int leftFrameHeight() const;
+    int rightFrameWidth() const;
+    int rightFrameHeight() const;
 
 public slots:
     void setCurrentFileIndex(int index);
@@ -76,6 +84,10 @@ private:
     int m_wiggleInterval;
     QVector<MpoParser::Frame> m_currentFrames;
     int m_imageVersion;
+    int m_leftFrameWidth;
+    int m_leftFrameHeight;
+    int m_rightFrameWidth;
+    int m_rightFrameHeight;
 };
 
 #endif // BACKEND_H

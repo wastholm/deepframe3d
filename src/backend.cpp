@@ -12,7 +12,11 @@ Backend::Backend(ManagedImageProvider *provider, QObject *parent)
       m_isPlaying(false),
       m_slideInterval(2000),
       m_wiggleInterval(200),
-      m_imageVersion(0)
+      m_imageVersion(0),
+      m_leftFrameWidth(0),
+      m_leftFrameHeight(0),
+      m_rightFrameWidth(0),
+      m_rightFrameHeight(0)
 {
     connect(&m_parser, &MpoParser::error, this, &Backend::handleError);
 }
@@ -85,6 +89,22 @@ Q_INVOKABLE void Backend::quit() {
 
 void Backend::handleFramesParsed(const QVector<MpoParser::Frame> &frames) {
     m_currentFrames = frames;
+    
+    // Store frame dimensions
+    if (frames.size() >= 1) {
+        m_leftFrameWidth = frames[0].width;
+        m_leftFrameHeight = frames[0].height;
+    } else {
+        m_leftFrameWidth = 0;
+        m_leftFrameHeight = 0;
+    }
+    if (frames.size() >= 2) {
+        m_rightFrameWidth = frames[1].width;
+        m_rightFrameHeight = frames[1].height;
+    } else {
+        m_rightFrameWidth = 0;
+        m_rightFrameHeight = 0;
+    }
     
     // Update image provider FIRST, before emitting signals
     if (frames.size() >= 2) {
@@ -165,3 +185,9 @@ ManagedImageProvider *Backend::provider()
 {
     return m_imageProvider;
 }
+
+// Getters for frame dimensions
+int Backend::leftFrameWidth() const { return m_leftFrameWidth; }
+int Backend::leftFrameHeight() const { return m_leftFrameHeight; }
+int Backend::rightFrameWidth() const { return m_rightFrameWidth; }
+int Backend::rightFrameHeight() const { return m_rightFrameHeight; }

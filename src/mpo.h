@@ -24,6 +24,8 @@ signals:
 
 private:
     QVector<Frame> extractFrames(const QByteArray &data);
+    QVector<Frame> parseJps(const QByteArray &data);
+    QVector<int> findMpoFrameOffsets(const QByteArray &data);
 };
 
 #endif // MPO_H

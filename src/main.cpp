@@ -5,11 +5,15 @@
 #include <QSettings>
 #include <QFileInfo>
 #include <QDir>
+#include <QLoggingCategory>
 
 #include "managedimageprovider.h"
 #include "backend.h"
 
 int main(int argc, char *argv[]) {
+    // Filter out noisy Qt image warnings
+    QLoggingCategory::setFilterRules("qt.gui.imageio.jpeg.debug=false");
+    
     QGuiApplication app(argc, argv);
     app.setApplicationName("Deepframe3D");
     app.setOrganizationName("Deepframe3D");
