@@ -100,7 +100,8 @@ ApplicationWindow {
         id: statusBar
         text: backend.fileCount > 0 ? 
               ("File: " + backend.currentFileName + 
-               " (" + (backend.currentFileIndex + 1) + "/" + backend.fileCount + ")" + 
+               " (" + (backend.currentFileIndex + 1) + "/" + backend.fileCount + ")" +
+               (backend.frameCount >= 1 ? " - " + backend.leftFrameWidth + "x" + backend.leftFrameHeight : "") + 
                " - Mode: " + modeNames[backend.viewingMode]) : 
               "No file loaded"
         horizontalAlignment: Text.AlignHCenter
