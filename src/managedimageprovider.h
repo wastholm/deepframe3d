@@ -1,13 +1,13 @@
-#ifndef IMAGEPROVIDER_H
-#define IMAGEPROVIDER_H
+#ifndef MANAGEDIMAGEPROVIDER_H
+#define MANAGEDIMAGEPROVIDER_H
 
 #include <QQuickImageProvider>
 #include <QImage>
 
-class FrameImageProvider : public QQuickImageProvider
+class ManagedImageProvider : public QQuickImageProvider
 {
 public:
-    FrameImageProvider();
+    explicit ManagedImageProvider();
     
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize) override;
     
@@ -20,4 +20,4 @@ private:
     QImage m_rightFrame;
 };
 
-#endif // IMAGEPROVIDER_H
+#endif // MANAGEDIMAGEPROVIDER_H

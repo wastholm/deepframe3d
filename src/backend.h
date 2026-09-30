@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QStringList>
 #include "mpo.h"
-#include "imageprovider.h"
+#include "managedimageprovider.h"
 
 class Backend : public QObject {
     Q_OBJECT
@@ -19,7 +19,8 @@ class Backend : public QObject {
     Q_PROPERTY(int imageVersion READ imageVersion NOTIFY framesLoaded)
 
 public:
-    explicit Backend(FrameImageProvider *provider, QObject *parent = nullptr);
+    explicit Backend(ManagedImageProvider *provider, QObject *parent = nullptr);
+    ManagedImageProvider *provider();
     
     Q_INVOKABLE void loadFiles(const QStringList &filePaths);
     Q_INVOKABLE void nextFile();
@@ -66,7 +67,7 @@ signals:
 
 private:
     MpoParser m_parser;
-    FrameImageProvider *m_imageProvider;
+    ManagedImageProvider *m_imageProvider;
     QStringList m_fileList;
     int m_currentFileIndex;
     int m_viewingMode;

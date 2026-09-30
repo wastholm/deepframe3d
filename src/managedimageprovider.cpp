@@ -1,8 +1,11 @@
-#include "imageprovider.h"
+#include "managedimageprovider.h"
 
-FrameImageProvider::FrameImageProvider() : QQuickImageProvider(QQuickImageProvider::Image) {}
+ManagedImageProvider::ManagedImageProvider()
+    : QQuickImageProvider(QQuickImageProvider::Image)
+{
+}
 
-QImage FrameImageProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize) {
+QImage ManagedImageProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize) {
     // Strip query parameters from id (e.g., "left?version=1" -> "left")
     QString baseId = id.split('?').first();
     
@@ -22,15 +25,15 @@ QImage FrameImageProvider::requestImage(const QString &id, QSize *size, const QS
     return QImage();
 }
 
-void FrameImageProvider::setLeftFrame(const QImage &image) {
+void ManagedImageProvider::setLeftFrame(const QImage &image) {
     m_leftFrame = image;
 }
 
-void FrameImageProvider::setRightFrame(const QImage &image) {
+void ManagedImageProvider::setRightFrame(const QImage &image) {
     m_rightFrame = image;
 }
 
-void FrameImageProvider::clearFrames() {
+void ManagedImageProvider::clearFrames() {
     m_leftFrame = QImage();
     m_rightFrame = QImage();
 }

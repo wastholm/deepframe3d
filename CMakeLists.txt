@@ -15,7 +15,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Quick Qml QuickControls2)
 set(SOURCES
     src/main.cpp
     src/mpo.cpp
-    src/imageprovider.cpp
+    src/managedimageprovider.cpp
     src/backend.cpp
 )
 

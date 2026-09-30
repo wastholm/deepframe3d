@@ -6,7 +6,7 @@
 #include <QFileInfo>
 #include <QDir>
 
-#include "imageprovider.h"
+#include "managedimageprovider.h"
 #include "backend.h"
 
 int main(int argc, char *argv[]) {
@@ -15,22 +15,20 @@ int main(int argc, char *argv[]) {
     app.setOrganizationName("Deepframe3D");
     app.setApplicationVersion("1.0.0");
 
-    // Create image provider and backend on the heap
-    // so they survive as long as the engine needs them
-    FrameImageProvider *imageProvider = new FrameImageProvider;
-    Backend *backend = new Backend(imageProvider);
-
     QQmlApplicationEngine engine;
     
-    // Register image provider
-    engine.addImageProvider("mpo", imageProvider);
+    // Create image provider on heap, parented to app so it outlives engine
+    ManagedImageProvider *imageProvider = new ManagedImageProvider();
+    imageProvider->setParent(&app);
     
+    // Create backend on heap, parented to app
+    Backend *backend = new Backend(imageProvider, &app);
+
     // Expose backend to QML
     engine.rootContext()->setContextProperty("backend", backend);
     
-    // Set parent-child relationship for proper cleanup
-    imageProvider->setParent(&engine);
-    backend->setParent(&engine);
+    // Register image provider
+    engine.addImageProvider("mpo", imageProvider);
 
     engine.load(QUrl("qrc:/main.qml"));
 

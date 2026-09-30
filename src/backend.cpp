@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QCoreApplication>
 
-Backend::Backend(FrameImageProvider *provider, QObject *parent)
+Backend::Backend(ManagedImageProvider *provider, QObject *parent)
     : QObject(parent),
       m_imageProvider(provider),
       m_currentFileIndex(0),
@@ -81,9 +81,8 @@ Q_INVOKABLE void Backend::quit() {
 
 void Backend::handleFramesParsed(const QVector<MpoParser::Frame> &frames) {
     m_currentFrames = frames;
-    emit frameCountChanged();
     
-    // Update image provider
+    // Update image provider FIRST, before emitting signals
     if (frames.size() >= 2) {
         m_imageProvider->setLeftFrame(frames[0].image);
         m_imageProvider->setRightFrame(frames[1].image);
@@ -93,6 +92,10 @@ void Backend::handleFramesParsed(const QVector<MpoParser::Frame> &frames) {
     } else {
         m_imageProvider->clearFrames();
     }
+    
+    // Now emit signals
+    emit frameCountChanged();
+    emit currentFileNameChanged();
     m_imageVersion++;
     emit framesLoaded();
 }
@@ -152,4 +155,9 @@ void Backend::setWiggleInterval(int interval) {
         m_wiggleInterval = interval;
         emit wiggleIntervalChanged();
     }
+}
+
+ManagedImageProvider *Backend::provider()
+{
+    return m_imageProvider;
 }

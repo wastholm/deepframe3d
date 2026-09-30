@@ -42,12 +42,12 @@ ApplicationWindow {
         Menu {
             title: "File"
             MenuItem { text: "Open... (Ctrl+O)"; onTriggered: {} }
-            MenuItem { text: "Exit"; onTriggered: backend.quit() }
+            MenuItem { text: "Exit (Ctrl+Q)"; onTriggered: backend.quit() }
         }
         Menu {
             title: "View"
             MenuItem { 
-                text: "Fullscreen"; 
+                text: "Fullscreen (F12)"; 
                 onTriggered: rootWindow.visibility === Window.FullScreen ? rootWindow.showNormal() : rootWindow.showFullScreen()
             }
         }
@@ -158,7 +158,15 @@ ApplicationWindow {
         }
     }
 
-    // Keyboard shortcuts - removed for now (Qt6 compatibility issue)
+    // Keyboard shortcuts
+    Shortcut {
+        sequence: "Ctrl+Q"
+        onActivated: backend.quit()
+    }
+    Shortcut {
+        sequence: "F12"
+        onActivated: rootWindow.visibility === Window.FullScreen ? rootWindow.showNormal() : rootWindow.showFullScreen()
+    }
 
     // Drop area for drag-and-drop
     DropArea {

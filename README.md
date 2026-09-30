@@ -12,12 +12,12 @@ A simple Plasma/KDE application for viewing MPO (Multi-Picture Object) stereo 3D
 - **Slideshow support:** Load multiple files and navigate through them
 - **Fullscreen mode** with F11 or via menu
 - **Keyboard shortcuts:**
+  - Ctrl+Q: Quit
+  - F12: Toggle fullscreen
   - Left/Right arrows: Previous/Next file
   - Space: Play/Pause slideshow
   - +/=: Faster slideshow
   - -: Slower slideshow
-  - F11: Toggle fullscreen
-  - Esc: Exit fullscreen
 
 - **File opening:**
   - Command line: `deepframe3d file1.mpo file2.mpo`
