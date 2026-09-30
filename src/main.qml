@@ -21,6 +21,13 @@ ApplicationWindow {
     Action { id: exitAction; text: "Exit"; shortcut: "Ctrl+Q"; onTriggered: backend.quit() }
     Action { id: fullscreenAction; text: "Fullscreen"; shortcut: "F12"; onTriggered: rootWindow.visibility === Window.FullScreen ? rootWindow.showNormal() : rootWindow.showFullScreen() }
     
+    // Slideshow actions with shortcuts
+    Action { id: playPauseAction; text: "Play/Pause"; shortcut: "Space"; onTriggered: backend.togglePlay() }
+    Action { id: previousAction; text: "Previous"; shortcut: "Left"; onTriggered: backend.prevFile() }
+    Action { id: nextAction; text: "Next"; shortcut: "Right"; onTriggered: backend.nextFile() }
+    Action { id: fasterAction; text: "Faster"; shortcut: "Up"; onTriggered: backend.faster() }
+    Action { id: slowerAction; text: "Slower"; shortcut: "Down"; onTriggered: backend.slower() }
+    
     // Actions for viewing modes
     Action { id: modeAnaglyph; text: "Anaglyph (Red/Cyan)"; checkable: true; onTriggered: backend.viewingMode = 0 }
     Action { id: modeSideBySide; text: "Side-by-Side"; checkable: true; onTriggered: backend.viewingMode = 1 }
@@ -72,26 +79,11 @@ ApplicationWindow {
         }
         Menu {
             title: "Slideshow"
-            MenuItem { 
-                text: "Play/Pause"; 
-                onTriggered: backend.togglePlay()
-            }
-            MenuItem { 
-                text: "Previous"; 
-                onTriggered: backend.prevFile()
-            }
-            MenuItem { 
-                text: "Next"; 
-                onTriggered: backend.nextFile()
-            }
-            MenuItem { 
-                text: "Faster"; 
-                onTriggered: backend.faster()
-            }
-            MenuItem { 
-                text: "Slower"; 
-                onTriggered: backend.slower()
-            }
+            MenuItem { action: playPauseAction }
+            MenuItem { action: previousAction }
+            MenuItem { action: nextAction }
+            MenuItem { action: fasterAction }
+            MenuItem { action: slowerAction }
         }
     }
 
@@ -190,6 +182,26 @@ ApplicationWindow {
     Shortcut {
         sequence: "F12"
         onActivated: rootWindow.visibility === Window.FullScreen ? rootWindow.showNormal() : rootWindow.showFullScreen()
+    }
+    Shortcut {
+        sequence: "Space"
+        onActivated: backend.togglePlay()
+    }
+    Shortcut {
+        sequence: "Right"
+        onActivated: backend.nextFile()
+    }
+    Shortcut {
+        sequence: "Left"
+        onActivated: backend.prevFile()
+    }
+    Shortcut {
+        sequence: "Up"
+        onActivated: backend.faster()
+    }
+    Shortcut {
+        sequence: "Down"
+        onActivated: backend.slower()
     }
 
     // Drop area for drag-and-drop
