@@ -5,7 +5,7 @@ A simple Plasma/KDE application for viewing MPO (Multi-Picture Object) stereo 3D
 ## Features
 
 - **Viewing modes:**
-  - Anaglyph (Red/Cyan) - for use with red-cyan 3D glasses (placeholder implementation)
+  - Anaglyph (Red/Cyan) - for use with red-cyan 3D glasses, using CPU-based Dubois-optimized color matrix
   - Side-by-Side - display both images horizontally
   - Wiggle - alternate between left and right images for depth perception
 
