@@ -101,7 +101,7 @@ ApplicationWindow {
                " - " + (backend.isPlaying ? "Playing (" + (backend.slideInterval / 1000).toFixed(1) + "s)" : "Paused")) : 
               "No file loaded"
         horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 12
+        font.pixelSize: Qt.font().pixelSize
         height: 24
         anchors.bottom: parent.bottom
         anchors.left: parent.left
@@ -223,7 +223,7 @@ ApplicationWindow {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             color: "white"
-            font.pixelSize: 14
+            font.pixelSize: Qt.font().pixelSize * 1.5
             text: ""
         }
         
