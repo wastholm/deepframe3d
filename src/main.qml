@@ -16,6 +16,9 @@ ApplicationWindow {
     // Viewing mode names
     readonly property var modeNames: ["Anaglyph (Red/Cyan)", "Side-by-Side", "Wiggle"]
     
+    // Track previous slide interval for toast messages
+    property int _prevSlideInterval: 2000
+    
     // Actions with shortcuts
     Action { id: openAction; text: "Open..."; shortcut: "Ctrl+O"; onTriggered: {} }
     Action { id: exitAction; text: "Exit"; shortcut: "Ctrl+Q"; onTriggered: backend.quit() }
@@ -94,7 +97,8 @@ ApplicationWindow {
               ("File: " + backend.currentFileName + 
                " (" + (backend.currentFileIndex + 1) + "/" + backend.fileCount + ")" +
                (backend.frameCount >= 1 ? " - " + backend.leftFrameWidth + "x" + backend.leftFrameHeight : "") + 
-               " - Mode: " + modeNames[backend.viewingMode]) : 
+               " - Mode: " + modeNames[backend.viewingMode] + 
+               " - " + (backend.isPlaying ? "Playing (" + (backend.slideInterval / 1000).toFixed(1) + "s)" : "Paused")) : 
               "No file loaded"
         horizontalAlignment: Text.AlignHCenter
         font.pixelSize: 12
@@ -174,36 +178,6 @@ ApplicationWindow {
         }
     }
 
-    // Keyboard shortcuts
-    Shortcut {
-        sequence: "Ctrl+Q"
-        onActivated: backend.quit()
-    }
-    Shortcut {
-        sequence: "F12"
-        onActivated: rootWindow.visibility === Window.FullScreen ? rootWindow.showNormal() : rootWindow.showFullScreen()
-    }
-    Shortcut {
-        sequence: "Space"
-        onActivated: backend.togglePlay()
-    }
-    Shortcut {
-        sequence: "Right"
-        onActivated: backend.nextFile()
-    }
-    Shortcut {
-        sequence: "Left"
-        onActivated: backend.prevFile()
-    }
-    Shortcut {
-        sequence: "Up"
-        onActivated: backend.faster()
-    }
-    Shortcut {
-        sequence: "Down"
-        onActivated: backend.slower()
-    }
-
     // Drop area for drag-and-drop
     DropArea {
         anchors.fill: parent
@@ -229,11 +203,71 @@ ApplicationWindow {
         }
     }
     
+    // Toast notification
+    Rectangle {
+        id: toast
+        visible: false
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: statusBar.top
+        anchors.bottomMargin: 10
+        width: 300
+        height: 40
+        color: "#404040"
+        opacity: 0
+        radius: 4
+        
+        Label {
+            id: toastLabel
+            anchors.fill: parent
+            anchors.margins: 10
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            color: "white"
+            font.pixelSize: 14
+            text: ""
+        }
+        
+        // Fade in and out animation
+        SequentialAnimation {
+            id: toastAnimation
+            running: false
+            PropertyAnimation { target: toast; property: "opacity"; to: 0.9; duration: 200 }
+            PauseAnimation { duration: 1500 }
+            PropertyAnimation { target: toast; property: "opacity"; to: 0; duration: 200 }
+        }
+    }
+    
     // Error display
     Connections {
         target: backend
         function onError(message) {
             statusBar.text = "Error: " + message
         }
+        function onIsPlayingChanged() {
+            if (backend.isPlaying) {
+                showToast("Playing");
+            } else {
+                showToast("Paused");
+            }
+        }
+        function onSlideIntervalChanged() {
+            var delta = backend.slideInterval - _prevSlideInterval;
+            if (delta < 0) {
+                showToast("Faster: " + (backend.slideInterval / 1000).toFixed(1) + "s");
+            } else if (delta > 0) {
+                showToast("Slower: " + (backend.slideInterval / 1000).toFixed(1) + "s");
+            } else {
+                showToast("Speed: " + (backend.slideInterval / 1000).toFixed(1) + "s");
+            }
+            _prevSlideInterval = backend.slideInterval;
+        }
+    }
+    
+    // Helper function to show toast
+    function showToast(message) {
+        toastLabel.text = message;
+        toast.visible = true;
+        toast.opacity = 0;
+        toastAnimation.restart();
     }
 }

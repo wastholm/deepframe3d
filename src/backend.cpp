@@ -3,6 +3,7 @@
 #include <QTimer>
 #include <QDebug>
 #include <QCoreApplication>
+#include <algorithm>
 
 Backend::Backend(ManagedImageProvider *provider, QObject *parent)
     : QObject(parent),
@@ -74,9 +75,7 @@ Q_INVOKABLE void Backend::togglePlay() {
 }
 
 Q_INVOKABLE void Backend::faster() {
-    if (m_slideInterval > 500) {
-        setSlideInterval(std::max(500, m_slideInterval - 500));
-    }
+    setSlideInterval(std::max(500, m_slideInterval - 500));
 }
 
 Q_INVOKABLE void Backend::slower() {
@@ -170,6 +169,9 @@ void Backend::setIsPlaying(bool playing) {
 void Backend::setSlideInterval(int interval) {
     if (m_slideInterval != interval) {
         m_slideInterval = interval;
+        emit slideIntervalChanged();
+    } else {
+        // Always emit so toast can show "Speed:" even when at limits
         emit slideIntervalChanged();
     }
 }
