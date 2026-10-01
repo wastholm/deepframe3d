@@ -5,12 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-09-30
+
+### Added
+- CPU-based Dubois-optimized anaglyph mode for improved 3D image quality
+
 ## [0.2.0] - 2026-09-30
 
 ### Added
 - Initial release of Deepframe3D
 - MPO stereo image viewing with three modes:
-  - Anaglyph (Red/Cyan) for use with 3D glasses (placeholder implementation)
+  - Anaglyph (Red/Cyan) for use with 3D glasses
   - Side-by-Side display
   - Wiggle mode (alternating between left/right images)
 - Slideshow support for multiple files
