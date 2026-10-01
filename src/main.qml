@@ -101,7 +101,7 @@ ApplicationWindow {
                " - " + (backend.isPlaying ? "Playing (" + (backend.slideInterval / 1000).toFixed(1) + "s)" : "Paused")) : 
               "No file loaded"
         horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: Qt.font().pixelSize
+        font.pixelSize: rootWindow.font.pixelSize
         height: 24
         anchors.bottom: parent.bottom
         anchors.left: parent.left
@@ -117,12 +117,22 @@ ApplicationWindow {
         anchors.bottomMargin: statusBar.height
         color: "black"
 
-        // Anaglyph mode
-        Image {
+        // Anaglyph mode - simple overlay (color requires QtGraphicalEffects for proper filtering)
+        Item {
+            id: anaglyphContainer
             visible: backend.viewingMode === 0 && backend.frameCount >= 2
             anchors.fill: parent
-            fillMode: Image.PreserveAspectFit
-            source: (visible ? ("image://mpo/left?version=" + backend.imageVersion) : "")
+            
+            Image {
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectFit
+                source: (anaglyphContainer.visible ? ("image://mpo/left?version=" + backend.imageVersion) : "")
+            }
+            Image {
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectFit
+                source: (anaglyphContainer.visible ? ("image://mpo/right?version=" + backend.imageVersion) : "")
+            }
         }
 
         // Side-by-side mode
@@ -223,7 +233,7 @@ ApplicationWindow {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             color: "white"
-            font.pixelSize: Qt.font().pixelSize * 1.5
+            font.pixelSize: rootWindow.font.pixelSize * 1.5
             text: ""
         }
         
