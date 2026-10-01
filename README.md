@@ -10,24 +10,31 @@ A simple Plasma/KDE application for viewing MPO (Multi-Picture Object) stereo 3D
   - Wiggle - alternate between left and right images for depth perception
 
 - **Slideshow support:** Load multiple files and navigate through them
-- **Fullscreen mode** with F11 or via menu
+- **Fullscreen mode** with F12 or via menu
 - **Keyboard shortcuts:**
   - Ctrl+Q: Quit
   - F12: Toggle fullscreen
   - Left/Right arrows: Previous/Next file
   - Space: Play/Pause slideshow
-  - +/=: Faster slideshow
-  - -: Slower slideshow
+  - Up/Down arrows: Faster/Slower slideshow
+  - A: Anaglyph (Red/Cyan) viewing mode
+  - S: Side-by-Side viewing mode
+  - W: Wiggle viewing mode
 
 - **File opening:**
   - Command line: `deepframe3d file1.mpo file2.mpo`
   - Drag and drop files onto the window
   - File > Open menu
 
-- **Persistent settings:** Remembers window position, size, and viewing mode
+- **Toast notifications:** Shows temporary messages for play/pause state, slideshow speed changes, and viewing mode changes
 
 ## Build
 
+```bash
+./build.sh
+```
+
+Or manually:
 ```bash
 mkdir build
 cd build
