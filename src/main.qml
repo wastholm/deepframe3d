@@ -32,9 +32,9 @@ ApplicationWindow {
     Action { id: slowerAction; text: "Slower"; shortcut: "Down"; onTriggered: backend.slower() }
     
     // Actions for viewing modes
-    Action { id: modeAnaglyph; text: "Anaglyph (Red/Cyan)"; checkable: true; onTriggered: backend.viewingMode = 0 }
-    Action { id: modeSideBySide; text: "Side-by-Side"; checkable: true; onTriggered: backend.viewingMode = 1 }
-    Action { id: modeWiggle; text: "Wiggle"; checkable: true; onTriggered: backend.viewingMode = 2 }
+    Action { id: modeAnaglyph; text: "Anaglyph (Red/Cyan)"; shortcut: "A"; checkable: true; onTriggered: backend.viewingMode = 0 }
+    Action { id: modeSideBySide; text: "Side-by-Side"; shortcut: "S"; checkable: true; onTriggered: backend.viewingMode = 1 }
+    Action { id: modeWiggle; text: "Wiggle"; shortcut: "W"; checkable: true; onTriggered: backend.viewingMode = 2 }
     ActionGroup { id: modeActionGroup; actions: [modeAnaglyph, modeSideBySide, modeWiggle] }
     
     // Initialize checked state based on backend
@@ -260,6 +260,9 @@ ApplicationWindow {
                 showToast("Speed: " + (backend.slideInterval / 1000).toFixed(1) + "s");
             }
             _prevSlideInterval = backend.slideInterval;
+        }
+        function onViewingModeChanged() {
+            showToast("Mode: " + modeNames[backend.viewingMode]);
         }
     }
     
