@@ -117,21 +117,15 @@ ApplicationWindow {
         anchors.bottomMargin: statusBar.height
         color: "black"
 
-        // Anaglyph mode - simple overlay (color requires QtGraphicalEffects for proper filtering)
+        // Anaglyph mode - Dubois optimized
         Item {
             id: anaglyphContainer
             visible: backend.viewingMode === 0 && backend.frameCount >= 2
             anchors.fill: parent
-            
             Image {
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectFit
-                source: (anaglyphContainer.visible ? ("image://mpo/left?version=" + backend.imageVersion) : "")
-            }
-            Image {
-                anchors.fill: parent
-                fillMode: Image.PreserveAspectFit
-                source: (anaglyphContainer.visible ? ("image://mpo/right?version=" + backend.imageVersion) : "")
+                source: (anaglyphContainer.visible ? ("image://mpo/anaglyph?version=" + backend.imageVersion) : "")
             }
         }
 
