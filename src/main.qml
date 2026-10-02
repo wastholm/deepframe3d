@@ -74,6 +74,7 @@ ApplicationWindow {
     // Menu bar
     MenuBar {
         id: menuBar
+        visible: rootWindow.visibility !== Window.FullScreen
         Menu {
             title: "File"
             MenuItem { action: openAction }
@@ -114,6 +115,8 @@ ApplicationWindow {
     // Status bar
     Label {
         id: statusBar
+        visible: rootWindow.visibility !== Window.FullScreen
+        height: visible ? 24 : 0
         text: backend.fileCount > 0 ? 
               ("File: " + backend.currentFileName + 
                " (" + (backend.currentFileIndex + 1) + "/" + backend.fileCount + ")" +
@@ -123,7 +126,6 @@ ApplicationWindow {
               "No file loaded"
         horizontalAlignment: Text.AlignHCenter
         font.pixelSize: rootWindow.font.pixelSize
-        height: 24
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
