@@ -140,6 +140,11 @@ ApplicationWindow {
         anchors.bottomMargin: statusBar.height
         color: "black"
 
+        MouseArea {
+            anchors.fill: parent
+            onDoubleClicked: rootWindow.visibility === Window.FullScreen ? rootWindow.showNormal() : rootWindow.showFullScreen()
+        }
+
         // Anaglyph mode - Dubois optimized
         Item {
             id: anaglyphContainer
