@@ -14,7 +14,7 @@ ApplicationWindow {
     // For now, use hardcoded defaults
 
     // Viewing mode names
-    readonly property var modeNames: ["Anaglyph (Red/Cyan)", "Side-by-Side", "Wiggle"]
+    readonly property var modeNames: ["Anaglyph", "Side-by-Side", "Wiggle"]
     
     // Track previous slide interval for toast messages
     property int _prevSlideInterval: 2000
@@ -32,16 +32,23 @@ ApplicationWindow {
     Action { id: slowerAction; text: "Slower"; shortcut: "Down"; onTriggered: backend.slower() }
     
     // Actions for viewing modes
-    Action { id: modeAnaglyph; text: "Anaglyph (Red/Cyan)"; shortcut: "A"; checkable: true; onTriggered: backend.viewingMode = 0 }
+    Action { id: modeAnaglyph; text: "Anaglyph"; shortcut: "A"; checkable: true; onTriggered: backend.viewingMode = 0 }
     Action { id: modeSideBySide; text: "Side-by-Side"; shortcut: "S"; checkable: true; onTriggered: backend.viewingMode = 1 }
     Action { id: modeWiggle; text: "Wiggle"; shortcut: "W"; checkable: true; onTriggered: backend.viewingMode = 2 }
     ActionGroup { id: modeActionGroup; actions: [modeAnaglyph, modeSideBySide, modeWiggle] }
     
-    // Initialize checked state based on backend
+    // Actions for anaglyph styles
+    Action { id: styleComfortable; text: "Comfortable"; shortcut: "C"; checkable: true; onTriggered: backend.anaglyphStyle = 0 }
+    Action { id: styleVivid; text: "Vivid"; shortcut: "V"; checkable: true; onTriggered: backend.anaglyphStyle = 1 }
+    ActionGroup { id: styleActionGroup; actions: [styleComfortable, styleVivid] }
+    
+    // Initialize checked states based on backend
     Component.onCompleted: {
         modeAnaglyph.checked = backend.viewingMode === 0
         modeSideBySide.checked = backend.viewingMode === 1
         modeWiggle.checked = backend.viewingMode === 2
+        styleComfortable.checked = backend.anaglyphStyle === 0
+        styleVivid.checked = backend.anaglyphStyle === 1
     }
 
     // Timer for slideshow
@@ -79,6 +86,20 @@ ApplicationWindow {
             MenuItem { action: modeAnaglyph }
             MenuItem { action: modeSideBySide }
             MenuItem { action: modeWiggle }
+            MenuSeparator { }
+            Menu {
+                title: "Anaglyph Style"
+                MenuItem { 
+                    action: styleComfortable
+                    onHoveredChanged: if (hovered) ToolTip.show("Minimizes ghosting and eye strain. Also known as the Dubois method.", 5000)
+                    onVisibleChanged: if (!visible) ToolTip.hide()
+                }
+                MenuItem { 
+                    action: styleVivid
+                    onHoveredChanged: if (hovered) ToolTip.show("Brighter, truer colors, but more ghosting on high-contrast edges.", 5000)
+                    onVisibleChanged: if (!visible) ToolTip.hide()
+                }
+            }
         }
         Menu {
             title: "Slideshow"
@@ -267,6 +288,10 @@ ApplicationWindow {
         }
         function onViewingModeChanged() {
             showToast("Mode: " + modeNames[backend.viewingMode]);
+        }
+        function onAnaglyphStyleChanged() {
+            styleComfortable.checked = backend.anaglyphStyle === 0
+            styleVivid.checked = backend.anaglyphStyle === 1
         }
     }
     

@@ -12,6 +12,7 @@ class Backend : public QObject {
     Q_PROPERTY(int fileCount READ fileCount NOTIFY fileCountChanged)
     Q_PROPERTY(QString currentFileName READ currentFileName NOTIFY currentFileNameChanged)
     Q_PROPERTY(int viewingMode READ viewingMode WRITE setViewingMode NOTIFY viewingModeChanged)
+    Q_PROPERTY(int anaglyphStyle READ anaglyphStyle WRITE setAnaglyphStyle NOTIFY anaglyphStyleChanged)
     Q_PROPERTY(int frameCount READ frameCount NOTIFY frameCountChanged)
     Q_PROPERTY(bool isPlaying READ isPlaying WRITE setIsPlaying NOTIFY isPlayingChanged)
     Q_PROPERTY(int slideInterval READ slideInterval WRITE setSlideInterval NOTIFY slideIntervalChanged)
@@ -41,6 +42,7 @@ private:
     int fileCount() const;
     QString currentFileName() const;
     int viewingMode() const;
+    int anaglyphStyle() const;
     int frameCount() const;
     bool isPlaying() const;
     int slideInterval() const;
@@ -54,6 +56,7 @@ private:
 public slots:
     void setCurrentFileIndex(int index);
     void setViewingMode(int mode);
+    void setAnaglyphStyle(int style);
     void setIsPlaying(bool playing);
     void setSlideInterval(int interval);
     void setWiggleInterval(int interval);
@@ -66,6 +69,7 @@ signals:
     void fileCountChanged();
     void currentFileNameChanged();
     void viewingModeChanged();
+    void anaglyphStyleChanged();
     void frameCountChanged();
     void isPlayingChanged();
     void slideIntervalChanged();
@@ -79,6 +83,7 @@ private:
     QStringList m_fileList;
     int m_currentFileIndex;
     int m_viewingMode;
+    int m_anaglyphStyle;
     bool m_isPlaying;
     int m_slideInterval;
     int m_wiggleInterval;
