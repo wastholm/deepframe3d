@@ -10,6 +10,7 @@ Backend::Backend(ManagedImageProvider *provider, QObject *parent)
       m_imageProvider(provider),
       m_currentFileIndex(0),
       m_viewingMode(0),
+      m_anaglyphStyle(0),
       m_isPlaying(false),
       m_slideInterval(2000),
       m_wiggleInterval(200),
@@ -20,6 +21,9 @@ Backend::Backend(ManagedImageProvider *provider, QObject *parent)
       m_rightFrameHeight(0)
 {
     connect(&m_parser, &MpoParser::error, this, &Backend::handleError);
+    connect(this, &Backend::anaglyphStyleChanged, [this, provider]() {
+        provider->setAnaglyphStyle(m_anaglyphStyle);
+    });
 }
 
 Q_INVOKABLE void Backend::loadFiles(const QStringList &filePaths) {
@@ -137,6 +141,7 @@ QString Backend::currentFileName() const {
     return QString();
 }
 int Backend::viewingMode() const { return m_viewingMode; }
+int Backend::anaglyphStyle() const { return m_anaglyphStyle; }
 int Backend::frameCount() const { return m_currentFrames.size(); }
 bool Backend::isPlaying() const { return m_isPlaying; }
 int Backend::slideInterval() const { return m_slideInterval; }
@@ -156,6 +161,15 @@ void Backend::setViewingMode(int mode) {
     if (m_viewingMode != mode) {
         m_viewingMode = mode;
         emit viewingModeChanged();
+    }
+}
+
+void Backend::setAnaglyphStyle(int style) {
+    if (m_anaglyphStyle != style) {
+        m_anaglyphStyle = style;
+        m_imageVersion++;
+        emit anaglyphStyleChanged();
+        emit framesLoaded();
     }
 }
 
