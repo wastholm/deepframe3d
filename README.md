@@ -5,9 +5,13 @@ A simple Plasma/KDE application for viewing MPO (Multi-Picture Object) stereo 3D
 ## Features
 
 - **Viewing modes:**
-  - Anaglyph (Red/Cyan) - for use with red-cyan 3D glasses, using CPU-based Dubois-optimized color matrix
+  - Anaglyph (Red/Cyan) - for use with red-cyan 3D glasses
   - Side-by-Side - display both images horizontally
   - Wiggle - alternate between left and right images for depth perception
+
+- **Anaglyph styles** (available when Anaglyph mode is selected):
+  - Comfortable (Dubois-optimized) - minimizes ghosting and eye strain
+  - Vivid (naive) - brighter colors, more ghosting on high-contrast edges
 
 - **Slideshow support:** Load multiple files and navigate through them
 - **Fullscreen mode** with F12 or via menu
@@ -17,9 +21,11 @@ A simple Plasma/KDE application for viewing MPO (Multi-Picture Object) stereo 3D
   - Left/Right arrows: Previous/Next file
   - Space: Play/Pause slideshow
   - Up/Down arrows: Faster/Slower slideshow
-  - A: Anaglyph (Red/Cyan) viewing mode
-  - S: Side-by-Side viewing mode
-  - W: Wiggle viewing mode
+  - A: Anaglyph mode
+  - S: Side-by-Side mode
+  - W: Wiggle mode
+  - C: Comfortable anaglyph style
+  - V: Vivid anaglyph style
 
 - **File opening:**
   - Command line: `deepframe3d file1.mpo file2.mpo`
