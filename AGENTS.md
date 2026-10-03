@@ -4,6 +4,7 @@
 - Use CMake
 - The `VERSION` file must always contain the current version number (and nothing else)
 - A `build.sh` script is provided for convenience
+- CPack is configured for Debian package generation via `make package`
 
 ## Project Structure
 - `src/` - Source code

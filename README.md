@@ -50,6 +50,13 @@ make
 sudo make install
 ```
 
+To build a Debian package:
+```bash
+cd build
+make package
+```
+This generates `deepframe3d-<version>-Linux.deb`.
+
 ## Installation
 
 After installation:
@@ -63,7 +70,7 @@ The application registers the `image/mpo` MIME type and associates `.mpo` files 
 
 ## Requirements
 
-- Qt 6 (Core, Gui, Quick, Qml, QuickControls2)
+- Qt 6 (Core, Gui, Quick, Qml, QuickControls2, Widgets)
 - C++17 compiler
 - CMake 3.16+
 
