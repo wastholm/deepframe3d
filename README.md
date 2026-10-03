@@ -16,6 +16,7 @@ A simple Plasma/KDE application for viewing MPO (Multi-Picture Object) stereo 3D
 - **Slideshow support:** Load multiple files and navigate through them
 - **Fullscreen mode** with F12 or via menu
 - **Keyboard shortcuts:**
+  - Ctrl+O: Open files
   - Ctrl+Q: Quit
   - F12: Toggle fullscreen
   - Left/Right arrows: Previous/Next file

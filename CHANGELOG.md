@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-10-02
+
+### Added
+- File > Open menu option now works with a native file picker dialog
+- Ctrl+O keyboard shortcut to open files
+- Support for opening multiple files at once via the file dialog
+- Image file filter in the file dialog (*.mpo, *.jpg, *.jpeg, *.png, *.bmp)
+
 ## [0.4.0] - 2026-09-30
 
 ### Added
