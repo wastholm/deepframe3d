@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(deepframe3d VERSION 1.0.0 LANGUAGES CXX)
+# Read version from VERSION file
+file(READ VERSION VERSION_FILE_CONTENT)
+string(STRIP "${VERSION_FILE_CONTENT}" PROJECT_VERSION)
+
+project(deepframe3d VERSION ${PROJECT_VERSION} LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -41,3 +45,19 @@ install(FILES icons/deepframe3d.svg DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/h
 install(FILES mimetypes/image-mpo.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/mime/packages RENAME deepframe3d.xml)
 
 install(TARGETS deepframe3d DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+# CPack configuration for Debian package
+include(InstallRequiredSystemLibraries)
+
+set(CPACK_GENERATOR "DEB")
+set(CPACK_PACKAGE_NAME "deepframe3d")
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+set(CPACK_PACKAGE_VENDOR "Deepframe3D")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A KDE application for viewing MPO (Multi-Picture Object) stereo 3D images")
+set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/user/deepframe3d")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Deepframe3D Team <deepframe3d@example.com>")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.27), libqt6core6 (>= 6.0), libqt6gui6 (>= 6.0), libqt6quick6 (>= 6.0), libqt6qml6 (>= 6.0), libqt6quickcontrols2-6 (>= 6.0), libqt6widgets6 (>= 6.0)")
+set(CPACK_DEBIAN_PACKAGE_SECTION "graphics")
+set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
+
+include(CPack)
