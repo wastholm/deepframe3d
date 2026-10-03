@@ -5,6 +5,7 @@
 #include <QSettings>
 #include <QFileInfo>
 #include <QDir>
+#include <QIcon>
 #include <QLoggingCategory>
 
 #include "managedimageprovider.h"
@@ -18,6 +19,10 @@ int main(int argc, char *argv[]) {
     app.setApplicationName("Deepframe3D");
     app.setOrganizationName("Deepframe3D");
     app.setApplicationVersion("1.0.0");
+    app.setWindowIcon(QIcon(":/icons/deepframe3d-48.png"));
+
+    QIcon icon(":/icons/deepframe3d-48.png");
+    qDebug() << "isNull: " << icon.isNull() << "; sizes: " << icon.availableSizes();
 
     QQmlApplicationEngine engine;
     

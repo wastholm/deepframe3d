@@ -49,6 +49,9 @@ ApplicationWindow {
         modeWiggle.checked = backend.viewingMode === 2
         styleComfortable.checked = backend.anaglyphStyle === 0
         styleVivid.checked = backend.anaglyphStyle === 1
+        
+        // Set window icon
+        Qt.application.windowIcon = Qt.resolvedUrl("qrc:///icons/deepframe3d-48.png")
     }
 
     // Timer for slideshow

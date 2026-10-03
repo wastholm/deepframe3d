@@ -1,5 +1,14 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>../icons/deepframe3d.svg</file>
+        <file>../icons/deepframe3d-128.png</file>
+        <file>../icons/deepframe3d-16.png</file>
+        <file>../icons/deepframe3d-22.png</file>
+        <file>../icons/deepframe3d-24.png</file>
+        <file>../icons/deepframe3d-256.png</file>
+        <file>../icons/deepframe3d-32.png</file>
+        <file>../icons/deepframe3d-48.png</file>
+        <file>../icons/deepframe3d-64.png</file>
     </qresource>
 </RCC>
