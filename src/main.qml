@@ -20,7 +20,7 @@ ApplicationWindow {
     property int _prevSlideInterval: 2000
     
     // Actions with shortcuts
-    Action { id: openAction; text: "Open..."; shortcut: "Ctrl+O"; onTriggered: {} }
+    Action { id: openAction; text: "Open..."; shortcut: "Ctrl+O"; onTriggered: backend.openFileDialog() }
     Action { id: exitAction; text: "Exit"; shortcut: "Ctrl+Q"; onTriggered: backend.quit() }
     Action { id: fullscreenAction; text: "Fullscreen"; shortcut: "F12"; onTriggered: rootWindow.visibility === Window.FullScreen ? rootWindow.showNormal() : rootWindow.showFullScreen() }
     

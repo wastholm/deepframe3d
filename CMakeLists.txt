@@ -9,7 +9,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Quick Qml QuickControls2)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Quick Qml QuickControls2 Widgets)
 
 # Sources
 set(SOURCES
@@ -31,7 +31,7 @@ qt6_add_resources(QRC_SRCS src/resources.qrc)
 # Create executable
 add_executable(deepframe3d ${SOURCES} ${QRC_SRCS})
 
-target_link_libraries(deepframe3d PRIVATE Qt6::Core Qt6::Gui Qt6::Quick Qt6::Qml Qt6::QuickControls2)
+target_link_libraries(deepframe3d PRIVATE Qt6::Core Qt6::Gui Qt6::Quick Qt6::Qml Qt6::QuickControls2 Qt6::Widgets)
 
 # Desktop file installation
 install(FILES resources/deepframe3d.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)

@@ -1,4 +1,4 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickWindow>
@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
     // Filter out noisy Qt image warnings
     QLoggingCategory::setFilterRules("qt.gui.imageio.jpeg.debug=false");
     
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
     app.setApplicationName("Deepframe3D");
     app.setOrganizationName("Deepframe3D");
     app.setApplicationVersion("1.0.0");

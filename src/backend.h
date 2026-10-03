@@ -28,6 +28,7 @@ public:
     ManagedImageProvider *provider();
     
     Q_INVOKABLE void loadFiles(const QStringList &filePaths);
+    Q_INVOKABLE void openFileDialog();
     Q_INVOKABLE void nextFile();
     Q_INVOKABLE void prevFile();
     Q_INVOKABLE void togglePlay();

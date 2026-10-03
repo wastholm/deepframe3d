@@ -3,6 +3,7 @@
 #include <QTimer>
 #include <QDebug>
 #include <QCoreApplication>
+#include <QFileDialog>
 #include <algorithm>
 
 Backend::Backend(ManagedImageProvider *provider, QObject *parent)
@@ -48,6 +49,24 @@ Q_INVOKABLE void Backend::loadFiles(const QStringList &filePaths) {
     emit fileCountChanged();
     emit currentFileIndexChanged();
     emit currentFileNameChanged();
+}
+
+Q_INVOKABLE void Backend::openFileDialog() {
+    QFileDialog dialog;
+    dialog.setWindowTitle("Open Image Files");
+    dialog.setFileMode(QFileDialog::ExistingFiles);
+    dialog.setNameFilters({
+        "Image files (*.mpo *.jpg *.jpeg *.png *.bmp)",
+        "All files (*)"
+    });
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    
+    if (dialog.exec()) {
+        QStringList selectedFiles = dialog.selectedFiles();
+        if (!selectedFiles.isEmpty()) {
+            loadFiles(selectedFiles);
+        }
+    }
 }
 
 void Backend::loadCurrentFile() {
