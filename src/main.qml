@@ -22,7 +22,7 @@ ApplicationWindow {
     // Actions with shortcuts
     Action { id: openAction; text: "Open..."; shortcut: "Ctrl+O"; onTriggered: backend.openFileDialog() }
     Action { id: exitAction; text: "Exit"; shortcut: "Ctrl+Q"; onTriggered: backend.quit() }
-    Action { id: fullscreenAction; text: "Fullscreen"; shortcut: "F12"; onTriggered: rootWindow.visibility === Window.FullScreen ? rootWindow.showNormal() : rootWindow.showFullScreen() }
+    Action { id: fullscreenAction; text: "Fullscreen"; shortcut: "F11"; onTriggered: rootWindow.visibility === Window.FullScreen ? rootWindow.showNormal() : rootWindow.showFullScreen() }
     
     // Slideshow actions with shortcuts
     Action { id: playPauseAction; text: "Play/Pause"; shortcut: "Space"; onTriggered: backend.togglePlay() }
